@@ -75,3 +75,17 @@ This is called by:
 ```
 
 The `defineClass1` in that is private and native, so any duplication would have to relax that constraint. Reflection might be able to.
+
+Custom Classes
+--------------
+
+Totally fine.
+
+```
+Comparing SHAZAM to SHAZAM: false
+Comparing class fatterman.MagicWord to class fatterman.MagicWord: false
+```
+
+This loads an enum and takes a single value from it. The custom class loader just changes the enum definition to a different one.
+
+It may well be sufficient to just load the original again. Enums are identical by reference since they are supposed to be loaded once.
