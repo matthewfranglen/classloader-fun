@@ -1,4 +1,4 @@
-package kimota;
+package marvelman;
 
 public class Miracle {
 

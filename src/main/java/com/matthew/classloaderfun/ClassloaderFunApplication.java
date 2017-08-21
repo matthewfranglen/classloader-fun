@@ -19,7 +19,7 @@ public class ClassloaderFunApplication implements CommandLineRunner {
 
     private void execute() {
         try {
-            Class<?> miracle = new FunClassLoader().loadClass("atomic.Miracle");
+            Class<?> miracle = new FunClassLoader().loadClass("fatterman.Miracle");
             Object instance = miracle.newInstance();
             Method shazam = miracle.getMethod("shazam");
 
