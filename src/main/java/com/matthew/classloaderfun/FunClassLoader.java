@@ -9,11 +9,12 @@ import java.nio.charset.StandardCharsets;
 
 public class FunClassLoader extends ClassLoader {
 
-    private static final int MIRACLE_FIRST_OFFSET = 0x62;
-    private static final int MIRACLE_SECOND_OFFSET = 0xd0;
+    private static final int[] MIRACLE_OFFSETS = {0x62, 0xd0};
 
-    private static final int DAY_OF_WEEK_FIRST_OFFSET = 0x5d;
-    private static final int DAY_OF_WEEK_SECOND_OFFSET = 0x94;
+    private static final int[] MAGIC_WORD_OFFSETS = {0x51, 0x86, 0xaa, 0xf9, 0x198, 0x1dc};
+
+    private static final int MAGIC_WORD_FIRST_OFFSET = 0x51;
+    private static final int MAGIC_WORD_SECOND_OFFSET = 0xaa;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -24,7 +25,7 @@ public class FunClassLoader extends ClassLoader {
     public Class<?> loadClass(String name) throws ClassNotFoundException {
         logger.info("Loading {}", name);
 
-        if (name.equals("java.time.DayOfWeek")) {
+        if (name.equals("fatterman.MagicWord")) {
             return findClass(name);
         } else {
             return super.loadClass(name);
@@ -36,13 +37,13 @@ public class FunClassLoader extends ClassLoader {
 
         if (name.equals("fatterman.Miracle")) {
             byte[] data = getClassData("BOOT-INF/classes/marvelman/Miracle.class");
-            byte[] fixed = substitute(data, "marvelman/", "fatterman/", MIRACLE_FIRST_OFFSET, MIRACLE_SECOND_OFFSET);
+            byte[] fixed = substitute(data, "marvelman/", "fatterman/", MIRACLE_OFFSETS);
 
             return defineClass(name, fixed, 0, fixed.length);
         }
-        if (name.equals("java.time.DayOfWeek")) {
-            byte[] data = getClassData("BOOT-INF/classes/marvelman/DayOfWeek.class");
-            byte[] fixed = substitute(data, "marvelman/", "java/time/", DAY_OF_WEEK_FIRST_OFFSET, DAY_OF_WEEK_SECOND_OFFSET);
+        if (name.equals("fatterman.MagicWord")) {
+            byte[] data = getClassData("BOOT-INF/classes/marvelman/MagicWord.class");
+            byte[] fixed = substitute(data, "marvelman/", "fatterman/", MAGIC_WORD_OFFSETS);
 
             return defineClass(name, fixed, 0, fixed.length);
         }
@@ -60,7 +61,7 @@ public class FunClassLoader extends ClassLoader {
         }
     }
 
-    private byte[] substitute(byte[] original, String old, String replacement, int... offsets) {
+    private byte[] substitute(byte[] original, String old, String replacement, int[] offsets) {
         byte[] result = original;
         for (int offset : offsets) {
             result = substituteOnce(result, old, replacement, offset);

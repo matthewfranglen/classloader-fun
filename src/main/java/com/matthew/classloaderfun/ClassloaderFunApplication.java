@@ -23,10 +23,11 @@ public class ClassloaderFunApplication implements CommandLineRunner {
             Object instance = miracle.newInstance();
             Method shazam = miracle.getMethod("shazam");
 
-            String real = "one";
+            fatterman.MagicWord real = fatterman.MagicWord.SHAZAM;
             Object fake = shazam.invoke(instance);
 
             System.out.println(real.getClass() == fake.getClass());
+            System.out.println(real == fake);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
