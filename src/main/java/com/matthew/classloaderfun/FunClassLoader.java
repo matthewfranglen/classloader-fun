@@ -5,6 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class FunClassLoader extends ClassLoader {
 
@@ -29,11 +30,15 @@ public class FunClassLoader extends ClassLoader {
 
         if (name.equals("atomic.Miracle")) {
             byte[] data = getClassData("BOOT-INF/classes/kimota/Miracle.class");
-            return defineClass(name, data, 0, data.length);
+            byte[] fixed = substitute(data, "atomic".getBytes(StandardCharsets.UTF_8), 0x74, "kimota/".length());
+
+            return defineClass(name, fixed, 0, fixed.length);
         }
         if (name.equals("java.lang.String")) {
             byte[] data = getClassData("BOOT-INF/classes/kimota/String.class");
-            return defineClass(name, data, 0, data.length);
+            byte[] fixed = substitute(data, "java.lang".getBytes(StandardCharsets.UTF_8), 0x74, "kimota/".length());
+
+            return defineClass(name, fixed, 0, fixed.length);
         }
 
         throw new ClassNotFoundException(name);
@@ -47,6 +52,20 @@ public class FunClassLoader extends ClassLoader {
         } catch (IOException e) {
             throw new ClassNotFoundException(name, e);
         }
+    }
+
+    private byte[] substitute(byte[] original, byte[] replacement, int offset, int length) {
+        byte[] result = new byte[original.length + replacement.length - length];
+        int before = offset;
+        int after = offset + length;
+        int newAfter = offset + replacement.length;
+        int afterLength = original.length - after;
+
+        System.arraycopy(original, 0, result, 0, before);
+        System.arraycopy(replacement, 0, result, before, replacement.length);
+        System.arraycopy(original, after, result, newAfter, afterLength);
+
+        return result;
     }
 
 }
