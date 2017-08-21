@@ -1,5 +1,7 @@
 package com.matthew.classloaderfun;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,6 +10,8 @@ import java.lang.reflect.Method;
 
 @SpringBootApplication
 public class ClassloaderFunApplication implements CommandLineRunner {
+
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public static void main(String[] args) {
         SpringApplication.run(ClassloaderFunApplication.class, args);
@@ -26,8 +30,8 @@ public class ClassloaderFunApplication implements CommandLineRunner {
             fatterman.MagicWord real = fatterman.MagicWord.SHAZAM;
             Object fake = shazam.invoke(instance);
 
-            System.out.println(real.getClass() == fake.getClass());
-            System.out.println(real == fake);
+            logger.info("Comparing {} to {}: {}", real, fake, real == fake);
+            logger.info("Comparing {} to {}: {}", real.getClass(), fake.getClass(), real.getClass() == fake.getClass());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
