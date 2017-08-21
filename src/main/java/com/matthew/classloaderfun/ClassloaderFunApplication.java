@@ -13,15 +13,23 @@ public class ClassloaderFunApplication implements CommandLineRunner {
         SpringApplication.run(ClassloaderFunApplication.class, args);
     }
 
-    public void run(String... args) throws Exception {
-        Class<?> miracle = new FunClassLoader().loadClass("atomic.Miracle");
-        Object instance = miracle.newInstance();
-        Method shazam = miracle.getMethod("shazam");
+    public void run(String... args) {
+        new Thread(this::execute).start();
+    }
 
-        String real = "one";
-        Object fake = shazam.invoke(instance);
+    private void execute() {
+        try {
+            Class<?> miracle = new FunClassLoader().loadClass("atomic.Miracle");
+            Object instance = miracle.newInstance();
+            Method shazam = miracle.getMethod("shazam");
 
-        System.out.println(real.getClass() == fake.getClass());
+            String real = "one";
+            Object fake = shazam.invoke(instance);
+
+            System.out.println(real.getClass() == fake.getClass());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }
