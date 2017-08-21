@@ -9,11 +9,11 @@ import java.nio.charset.StandardCharsets;
 
 public class FunClassLoader extends ClassLoader {
 
-    private static final int MIRACLE_FIRST_OFFSET = 0x65;
-    private static final int MIRACLE_SECOND_OFFSET = 0xde;
+    private static final int MIRACLE_FIRST_OFFSET = 0x62;
+    private static final int MIRACLE_SECOND_OFFSET = 0xd0;
 
-    private static final int STRING_FIRST_OFFSET = 0x5d;
-    private static final int STRING_SECOND_OFFSET = 0x91;
+    private static final int DAY_OF_WEEK_FIRST_OFFSET = 0x5d;
+    private static final int DAY_OF_WEEK_SECOND_OFFSET = 0x94;
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
@@ -24,7 +24,7 @@ public class FunClassLoader extends ClassLoader {
     public Class<?> loadClass(String name) throws ClassNotFoundException {
         logger.info("Loading {}", name);
 
-        if (name.equals("java.lang.String")) {
+        if (name.equals("java.time.DayOfWeek")) {
             return findClass(name);
         } else {
             return super.loadClass(name);
@@ -40,9 +40,9 @@ public class FunClassLoader extends ClassLoader {
 
             return defineClass(name, fixed, 0, fixed.length);
         }
-        if (name.equals("java.lang.String")) {
-            byte[] data = getClassData("BOOT-INF/classes/marvelman/String.class");
-            byte[] fixed = substitute(data, "marvelman/", "java/lang/", STRING_FIRST_OFFSET, STRING_SECOND_OFFSET);
+        if (name.equals("java.time.DayOfWeek")) {
+            byte[] data = getClassData("BOOT-INF/classes/marvelman/DayOfWeek.class");
+            byte[] fixed = substitute(data, "marvelman/", "java/time/", DAY_OF_WEEK_FIRST_OFFSET, DAY_OF_WEEK_SECOND_OFFSET);
 
             return defineClass(name, fixed, 0, fixed.length);
         }
