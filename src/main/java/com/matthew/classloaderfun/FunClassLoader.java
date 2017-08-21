@@ -9,8 +9,8 @@ import java.nio.charset.StandardCharsets;
 
 public class FunClassLoader extends ClassLoader {
 
-    private static final int MIRACLE_FIRST_OFFSET = 0x74;
-    private static final int MIRACLE_SECOND_OFFSET = 0x107;
+    private static final int MIRACLE_FIRST_OFFSET = 0x65;
+    private static final int MIRACLE_SECOND_OFFSET = 0xde;
 
     private static final int STRING_FIRST_OFFSET = 0x5d;
     private static final int STRING_SECOND_OFFSET = 0x91;
